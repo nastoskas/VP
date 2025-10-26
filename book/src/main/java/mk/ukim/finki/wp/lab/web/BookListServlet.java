@@ -32,16 +32,17 @@ public class BookListServlet extends HttpServlet {
 
         WebContext context = new WebContext(webExchange);
         context.setVariable("book_list",this.bookService.listAll());
-        context.setVariable("searchText",req.getParameter("searchText"));
-        context.setVariable("minRating",req.getParameter("minRating"));
 
-//        String searchText = req.getParameter("searchText");
-//        String minRatingParam = req.getParameter("minRating");
-//        double minRating = 0.0; // default if not provided
-//        if (minRatingParam != null && !minRatingParam.isEmpty()) {
-//            minRating = Double.parseDouble(minRatingParam);
-//        }
-//        context.setVariable("searchBook",this.bookService.searchBooks(searchText,minRating));
+        String searchText = "";
+        double minRating = 0.0;
+        if (req.getParameter("minRating") != null && req.getParameter("searchText")!= null) {
+            searchText = req.getParameter("searchText");
+            minRating = Double.parseDouble(req.getParameter("minRating"));
+        }
+        
+        context.setVariable("searchBook",this.bookService.searchBooks(searchText,minRating));
+        
         springTemplateEngine.process("listBooks.html", context, resp.getWriter());
     }
 }
+
